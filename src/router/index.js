@@ -1,7 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import HomeView from "../views/HomeView.vue";
-
+import TestGpt from "../views/TestGpt.vue";
 Vue.use(VueRouter);
 
 const routes = [
@@ -9,6 +9,11 @@ const routes = [
     path: "/",
     name: "homeView",
     component: HomeView,
+  },
+  {
+    path: "/test",
+    name: "testGpt",
+    component: TestGpt,
   },
   {
     path: "/about",
