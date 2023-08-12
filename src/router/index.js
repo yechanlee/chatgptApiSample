@@ -7,13 +7,13 @@ Vue.use(VueRouter);
 const routes = [
   {
     path: "/",
-    name: "homeView",
-    component: HomeView,
+    name: "testGpt",
+    component: TestGpt,
   },
   {
     path: "/test",
-    name: "testGpt",
-    component: TestGpt,
+    name: "homeView",
+    component: HomeView,
   },
   {
     path: "/about",
@@ -27,6 +27,7 @@ const routes = [
 
 const router = new VueRouter({
   routes,
+  mode: "history",
 });
 
 export default router;
