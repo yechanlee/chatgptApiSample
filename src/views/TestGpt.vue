@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid>
+  <v-container fluid class="testGpt">
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6">
         <v-card class="chat-card" elevation="10">
@@ -37,7 +37,13 @@
         </v-card>
       </v-col>
     </v-row>
-
+    <v-row>
+      <paragraph-component
+        v-for="(paragraph, index) in paragraphs"
+        :key="index"
+        :content="paragraph"
+      />
+    </v-row>
     <v-row>
       <v-col>
         <v-container>
@@ -70,8 +76,13 @@
 <script>
 import axios from "axios";
 import Tesseract from "tesseract.js";
+import ParagraphComponent from "../components/ParagraphComponent.vue";
 
 export default {
+  name: "TestGpt",
+  components() {
+    ParagraphComponent;
+  },
   data() {
     return {
       inputText: "",
@@ -82,6 +93,14 @@ export default {
       selectedImage: null,
       selectedImageUrl: "",
       ocrResult: "",
+      paragraphs: [],
+      messages: [
+        {
+          role: "system",
+          content:
+            "연애상담을 해준다. 나이대에 맞게 적절한 조언을 친절하게 해준다. 다양한 사례나 예시도 들기도 한다. 마지막에는 '요약:' 으로 끝나는 줄로 요약해주며 답변을 마친다'",
+        },
+      ],
     };
   },
   watch() {
@@ -93,20 +112,14 @@ export default {
       const prompt = textThing;
       this.showDialog = true;
       try {
+        this.messages.push({ role: "user", content: prompt });
         const response = await axios
           .post(
             "https://api.openai.com/v1/chat/completions",
             {
               model: "gpt-3.5-turbo",
-              messages: [
-                { role: "user", content: prompt },
-                {
-                  role: "system",
-                  content:
-                    "수학문제를 풀어주는 프로그램이며 명쾌하게 답변을 해주고 계산식을 보여주어야 한다. 너무 복잡하게 답변을 하면안되고 간단명료하게 3줄정도로 할것 이유도 설명해줄 것",
-                },
-              ],
-              temperature: 1.25,
+              messages: this.messages,
+              temperature: 1,
               top_p: 1,
               frequency_penalty: 0,
               presence_penalty: 0,
@@ -120,10 +133,11 @@ export default {
           )
           .then((data) => {
             this.generatedText = data.data.choices[0].message.content;
+            this.paragraphs = this.generatedText.split("\n");
+            this.messages.push(data.data.choices[0].message);
             console.log(this.generatedText);
           });
 
-        this.generatedText = response.data.choices[0].content;
         this.showDialog = false;
       } catch (error) {
         this.showDialog = false;
