@@ -1,6 +1,5 @@
 <template>
   <div class="paragraph">
-    <h2>{{ number }}. {{ title }}</h2>
     <p>{{ content }}</p>
   </div>
 </template>
@@ -11,12 +10,9 @@ export default {
   props: {
     number: String,
     title: String,
+    content: String,
   },
-  computed: {
-    content() {
-      return this.$slots.default[0].text;
-    },
-  },
+  computed: {},
 };
 </script>
 

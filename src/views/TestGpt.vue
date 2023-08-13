@@ -1,5 +1,29 @@
 <template>
   <v-container fluid class="testGpt">
+    <v-row>
+      <v-col>
+        <v-container>
+          <v-row justify="center">
+            <v-col cols="12" sm="10">
+              <v-card class="response-box" elevation="4">
+                <!-- <v-card-text class="response-text">{{ generatedText }}</v-card-text> -->
+                <paragraph-component
+                  v-for="(paragraph, index) in paragraphs"
+                  :key="index"
+                  :content="paragraph"
+                />
+                <v-btn v-if="showLikeButton" @click="likeResponse" color="primary">👍Like</v-btn>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+
+        <!-- <v-card>
+          <v-card-title>Generated Text</v-card-title>
+          <v-card-text>{{ generatedText }}</v-card-text>
+        </v-card> -->
+      </v-col>
+    </v-row>
     <v-row justify="center">
       <v-col cols="12" sm="8" md="6">
         <v-card class="chat-card" elevation="10">
@@ -17,52 +41,12 @@
               <v-btn @click="generateText(inputText)" color="primary" class="ask-button">Ask</v-btn>
             </div>
             <v-divider class="divider"></v-divider>
-            <v-row justify="center">
-              <v-col cols="12" sm="6">
-                <v-file-input
-                  v-model="selectedImage"
-                  accept="image/*"
-                  @change="handleImageChange"
-                ></v-file-input>
-                <v-img v-if="selectedImageUrl" :src="selectedImageUrl" class="mt-4"></v-img>
-                <v-btn @click="performOCR" color="primary">해당 사진 바로 질문하기</v-btn>
-
-                <v-card v-if="ocrResult" class="mt-4">
-                  <v-card-title>Extracted Text:</v-card-title>
-                  <v-card-text>{{ ocrResult }}</v-card-text>
-                </v-card>
-              </v-col>
-            </v-row>
           </v-card-text>
         </v-card>
       </v-col>
     </v-row>
-    <v-row>
-      <paragraph-component
-        v-for="(paragraph, index) in paragraphs"
-        :key="index"
-        :content="paragraph"
-      />
-    </v-row>
-    <v-row>
-      <v-col>
-        <v-container>
-          <v-row justify="center">
-            <v-col cols="12" sm="10">
-              <v-card class="response-box" elevation="4">
-                <v-card-text class="response-text">{{ generatedText }}</v-card-text>
-                <v-btn v-if="showLikeButton" @click="likeResponse" color="primary">👍Like</v-btn>
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-container>
+    <v-row> </v-row>
 
-        <!-- <v-card>
-          <v-card-title>Generated Text</v-card-title>
-          <v-card-text>{{ generatedText }}</v-card-text>
-        </v-card> -->
-      </v-col>
-    </v-row>
     <v-dialog v-model="showDialog" max-width="500px">
       <v-card>
         <v-card-title> Chat GPT에게 답변을 받는중입니다. </v-card-title>
@@ -80,8 +64,8 @@ import ParagraphComponent from "../components/ParagraphComponent.vue";
 
 export default {
   name: "TestGpt",
-  components() {
-    ParagraphComponent;
+  components: {
+    ParagraphComponent,
   },
   data() {
     return {
@@ -98,7 +82,7 @@ export default {
         {
           role: "system",
           content:
-            "연애상담을 해준다. 나이대에 맞게 적절한 조언을 친절하게 해준다. 다양한 사례나 예시도 들기도 한다. 마지막에는 '요약:' 으로 끝나는 줄로 요약해주며 답변을 마친다'",
+            "연애상담을 해준다. 나이대에 맞게 적절한 조언을 친절하게 해준다. 다양한 사례나 예시도 들기도 한다. 마지막에는 '한줄 요약:' 으로 끝나는 줄로 요약해주며 답변을 마친다'",
         },
       ],
     };
