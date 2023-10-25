@@ -82,7 +82,7 @@ export default {
         {
           role: "system",
           content:
-            "연애상담을 해준다. 나이대에 맞게 적절한 조언을 친절하게 해준다. 다양한 사례나 예시도 들기도 한다. 마지막에는 '한줄 요약:' 으로 끝나는 줄로 요약해주며 답변을 마친다'",
+            "너는 나에게 한국어로 반말을 하며, 내가하는 대화의 맞춤법을 검사하는 AI야. 어떤부분이 틀렸는지 정확하게 짚어주고 올바른 표현은 무엇인지 알려주지. 뻐스 등과 같이 영어식 표현도 올바른 버스 라고 알려주기도하지.",
         },
       ],
     };
@@ -92,7 +92,7 @@ export default {
   },
   methods: {
     async generateText(textThing) {
-      const apiKey = "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"; // 발급받은 API 키로 대체
+      const apiKey = "sk-diUCKLNmp8DCeUU*******"; // 발급받은 API 키로 대체
       const prompt = textThing;
       this.showDialog = true;
       try {
@@ -107,6 +107,7 @@ export default {
               top_p: 1,
               frequency_penalty: 0,
               presence_penalty: 0,
+              max_tokens: 256,
             },
             {
               headers: {
